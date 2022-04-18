@@ -7,8 +7,11 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    //init board
     this->board = new QGobangBoard(this);
     this->board->show();
+
+    connect(this->ui->testBtn, &QPushButton::clicked, this->board, &QGobangBoard::slot_clearBoard);
 }
 
 MainWindow::~MainWindow()
