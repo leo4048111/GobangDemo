@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <cstring>
 
+#include <iostream>
 
 namespace ABPruning
 {
@@ -96,6 +97,13 @@ namespace ABPruning
 				this->parent = parent;
 				this->status = status;
 			}
+
+            ~_Node()
+            {
+                if(!this->children.empty())
+                    for(auto child:this->children) delete child;
+                this->children.clear();
+            }
 		}Node, * LPNode;
 		
 		typedef struct _EstimateResult
@@ -134,8 +142,6 @@ namespace ABPruning
 		EstimateResult estimate(const Board board);
 
 		int dfs(LPNode& node);
-
-		void deleteTree(LPNode& root);
 
 	public:
 		Vec2 run(Board board);

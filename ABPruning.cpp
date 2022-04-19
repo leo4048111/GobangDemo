@@ -4,6 +4,7 @@
 #include <cmath>
 #include <random>
 #include <algorithm>
+
 namespace ABPruning
 {
     ABPruningEngine* ABPruningEngine::instance = nullptr;
@@ -228,7 +229,7 @@ namespace ABPruning
                 for (int w = PIECES_PER_ROW - i + 1; w <= i; w++)
                 {
                     Vec2 pos = { k,w };
-                    if(std::find(this->searchSequence.begin(),this->searchSequence.end(), pos) == this->searchSequence.end())
+                    if (std::find(this->searchSequence.begin(), this->searchSequence.end(), pos) == this->searchSequence.end())
                         this->searchSequence.push_back({ k,w });
                 }
     }
@@ -242,7 +243,7 @@ namespace ABPruning
             {
                 if (board[i][j] != BlockStatus::empty)
                     if (board[i][j] == BlockStatus::white) hashValue ^= this->whitePiecesHash[i][j];
-                    else if(board[i][j] == BlockStatus::black) hashValue ^= this->blackPiecesHash[i][j];
+                    else if (board[i][j] == BlockStatus::black) hashValue ^= this->blackPiecesHash[i][j];
             }
         }
 
@@ -293,7 +294,7 @@ namespace ABPruning
                 stat[3][(int)type]++;
             }
         }
-        
+
         //统计总分
         EstimateResult result;
         for (int type = (int)ScenarioType::OTHER; type <= (int)ScenarioType::flex1; type++)
@@ -312,11 +313,11 @@ namespace ABPruning
         return result;
     }
 
-#define MAX_SEARCH_DEPTH 2
+#define MAX_SEARCH_DEPTH 4
 
     int ABPruningEngine::dfs(LPNode& node)
     {
-        if (node->depth >= MAX_SEARCH_DEPTH)
+        if (node->depth >= MAX_SEARCH_DEPTH || node->status != WinningStatus::NO_WIN)
         {
             EstimateResult result = estimate(node->board);
             node->value = result.score;
@@ -332,12 +333,12 @@ namespace ABPruning
                 Board newBoard;
                 memcpy_s(newBoard, sizeof(Board), node->board, sizeof(Board));
                 newBoard[i][j] = node->isMax ? BlockStatus::white : BlockStatus::black;
-                LPNode newNode = new Node(newBoard, node->depth + 1, NULL, node->alpha, node->beta, !node->isMax, node, WinningStatus::NO_WIN);
+                LPNode newNode = new Node(newBoard, node->depth + 1, 0, node->alpha, node->beta, !node->isMax, node, WinningStatus::NO_WIN);
                 node->children.push_back(newNode);
                 int childValue = dfs(newNode);
                 if (node->isMax)
                 {
-                    if(node->depth == 0 && (childValue > node->alpha)) this->bestMove = {i, j};
+                    if (node->depth == 0 && (childValue > node->alpha)) this->bestMove = { i, j };
                     node->alpha = std::max(node->alpha, childValue);   //is max
                     node->value = node->alpha;
                 }
@@ -354,21 +355,12 @@ namespace ABPruning
 
     Vec2 ABPruningEngine::run(Board board)  //传入的状态必定为MAX层
     {
-        this->bestMove = {-1, -1};
+        this->bestMove = { -1, -1 };
         EstimateResult result = estimate(board);
-        LPNode root = new Node(board, 0, result.score, INT_MIN, INT_MAX, true, nullptr, result.status); 
+        LPNode root = new Node(board, 0, result.score, INT_MIN, INT_MAX, true, nullptr, result.status);
         int val = dfs(root);
-        deleteTree(root);
-        return this->bestMove;
-    }
-
-    void ABPruningEngine::deleteTree(LPNode& root)
-    {
-        for (auto child : root->children)
-            deleteTree(child);
-
         delete root;
-        root = nullptr;
+        return this->bestMove;
     }
 
     ABPruningEngine::ABPruningEngine()

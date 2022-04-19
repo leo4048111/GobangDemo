@@ -87,6 +87,8 @@ void QGobangBoard::slot_clearBoard()
 
     //clear flags
     this->isBlackTurn = true;
+    while(!this->blackMovements.empty()) this->blackMovements.pop();
+    while(!this->whiteMovements.empty()) this->whiteMovements.pop();
 }
 
 void QGobangBoard::slot_placePiece(int posX, int posY, bool isBlack)

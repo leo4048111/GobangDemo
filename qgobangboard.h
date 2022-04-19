@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QFrame>
+#include <stack>
 #include "qchesspiece.h"
 #include "ABPruning.h"
 
@@ -29,6 +30,8 @@ private:
     bool isBlackTurn{true};
     QChessPiece* mat_board[PIECES_PER_ROW + 2][PIECES_PER_ROW +2]{{nullptr}};
     ABPruning::ABPruningEngine::Board board;
+    std::stack<ABPruning::Vec2> blackMovements;
+    std::stack<ABPruning::Vec2> whiteMovements;
 
 };
 
