@@ -388,6 +388,7 @@ namespace ABPruning
     Vec2 ABPruningEngine::run(Board board)  //传入的状态必定为MAX层
     {
         EstimateResult result = estimate(board);
+        if(result.status != ABPruning::ABPruningEngine::WinningStatus::NO_WIN) return {-1, -1};
         LPNode root = new Node(board, 0, result.score, INT_MIN, INT_MAX, true, nullptr, result.status);
         this->initPiecesPosition(board);
         int val = dfs(root);

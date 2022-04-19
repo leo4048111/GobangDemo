@@ -7,7 +7,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
+    //controllers
     connect(this->ui->btnRestart, &QPushButton::clicked, this->ui->board, &QGobangBoard::slot_clearBoard);
+    connect(this->ui->btnUndo, &QPushButton::clicked, this->ui->board, &QGobangBoard::slot_undoMove);
 }
 
 MainWindow::~MainWindow()

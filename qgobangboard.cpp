@@ -2,6 +2,7 @@
 #include <QGraphicsDropShadowEffect>
 #include <QMouseEvent>
 #include <cstring>
+#include <Windows.h>
 
 #include "qgobangboard.h"
 
@@ -86,15 +87,14 @@ void QGobangBoard::slot_clearBoard()
     }
 
     //clear flags
-    this->isBlackTurn = true;
-    while(!this->blackMovements.empty()) this->blackMovements.pop();
-    while(!this->whiteMovements.empty()) this->whiteMovements.pop();
+    while(!this->playerMovements.empty()) this->playerMovements.pop();
+    while(!this->aiMovements.empty()) this->aiMovements.pop();
 
     //reset engine
     ABPruning::ABPruningEngine::getInstance()->reset();
 }
 
-void QGobangBoard::slot_placePiece(int posX, int posY, bool isBlack)
+void QGobangBoard::slot_placePiece(int posX, int posY, bool isPlayer)
 {
     if(posX > PIECES_PER_ROW) posX = PIECES_PER_ROW;
     if(posY > PIECES_PER_ROW) posX = PIECES_PER_ROW;
@@ -102,11 +102,57 @@ void QGobangBoard::slot_placePiece(int posX, int posY, bool isBlack)
     if(posY < 1) posY = 1;
     uint32_t midX = board_border_width + board_margin + block_width * (posX - 1);
     uint32_t midY = board_border_width + board_margin + block_height * (posY - 1);
-    QChessPiece* chessPiece = new QChessPiece(midX, midY, isBlack, this);
+    QChessPiece* chessPiece = new QChessPiece(midX, midY, !(isPlayer ^ this->isPlayerBlack), this);
     chessPiece->show();
     this->mat_board[posX][posY] = chessPiece;
-    this->isBlackTurn = !this->isBlackTurn;
-    this->board[posX][posY] = isBlack?ABPruning::BlockStatus::black:ABPruning::BlockStatus::white;
+    this->board[posX][posY] = (!(isPlayer ^ this->isPlayerBlack))?ABPruning::BlockStatus::black:ABPruning::BlockStatus::white;
+    if(isPlayer) this->playerMovements.push({posX, posY});
+    else this->aiMovements.push({posX, posY});
+}
+
+void QGobangBoard::slot_undoMove()
+{
+    if(this->playerMovements.empty()) return;
+
+    if(!this->playerMovements.empty())
+    {
+        ABPruning::Vec2 pos = this->playerMovements.top();
+        this->playerMovements.pop();
+        if(this->mat_board[pos.x][pos.y] != nullptr)
+        {
+            delete this->mat_board[pos.x][pos.y];
+            this->mat_board[pos.x][pos.y] = nullptr;
+        }
+
+        this->board[pos.x][pos.y] = ABPruning::BlockStatus::empty;
+    }
+
+    if(!this->aiMovements.empty())
+    {
+        ABPruning::Vec2 pos = this->aiMovements.top();
+        this->aiMovements.pop();
+        if(this->mat_board[pos.x][pos.y] != nullptr)
+        {
+            delete this->mat_board[pos.x][pos.y];
+            this->mat_board[pos.x][pos.y] = nullptr;
+        }
+
+        this->board[pos.x][pos.y] = ABPruning::BlockStatus::empty;
+    }
+}
+
+DWORD WINAPI FindBestMoveThread(LPVOID params)
+{
+    QGobangBoard* pThis = reinterpret_cast<QGobangBoard*>(params);
+    pThis->findBestMove();
+    return NULL;
+}
+
+void QGobangBoard::findBestMove()
+{
+    ABPruning::Vec2 result = ABPruning::ABPruningEngine::getInstance()->run(this->board);
+    if(result.x != -1 && result.y != -1)
+        emit signal_placePiece(result.x, result.y, false);
 }
 
 void QGobangBoard::mousePressEvent(QMouseEvent* event)
@@ -118,9 +164,8 @@ void QGobangBoard::mousePressEvent(QMouseEvent* event)
     int posY = (coord.y() - board_border_width - board_margin + block_height/2)/block_height + 1;
     if(posX > PIECES_PER_ROW || posY >PIECES_PER_ROW) return;
     if(this->mat_board[posX][posY] != nullptr) return;
-    emit signal_placePiece(posX, posY, this->isBlackTurn);
-
-    ABPruning::Vec2 result = ABPruning::ABPruningEngine::getInstance()->run(this->board);
-    emit signal_placePiece(result.x, result.y, this->isBlackTurn);
+    emit signal_placePiece(posX, posY, true);
+    HANDLE hThread = CreateThread(nullptr, NULL, FindBestMoveThread, (LPVOID)this, NULL, nullptr);
+    CloseHandle(hThread);
 }
 

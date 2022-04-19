@@ -15,24 +15,28 @@ public:
     explicit QGobangBoard(QWidget* parent = nullptr);
 
 signals:
-    void signal_placePiece(int posX, int posY, bool isBlack);
+    void signal_placePiece(int posX, int posY, bool isPlayer);
     void signal_clearBoard();
 
 private slots:
     void mousePressEvent(QMouseEvent* event);
 
 public slots:
-    void slot_placePiece(int posX, int posY, bool isBlack);
+    void slot_placePiece(int posX, int posY, bool isPlayer);
 
     void slot_clearBoard();
 
+    void slot_undoMove();
+
+public:
+    void findBestMove();
 
 private:
-    bool isBlackTurn{true};
+    bool isPlayerBlack{true};
     QChessPiece* mat_board[PIECES_PER_ROW + 2][PIECES_PER_ROW +2]{{nullptr}};
     ABPruning::ABPruningEngine::Board board;
-    std::stack<ABPruning::Vec2> blackMovements;
-    std::stack<ABPruning::Vec2> whiteMovements;
+    std::stack<ABPruning::Vec2> playerMovements;
+    std::stack<ABPruning::Vec2> aiMovements;
 
 };
 
