@@ -89,6 +89,9 @@ void QGobangBoard::slot_clearBoard()
     this->isBlackTurn = true;
     while(!this->blackMovements.empty()) this->blackMovements.pop();
     while(!this->whiteMovements.empty()) this->whiteMovements.pop();
+
+    //reset engine
+    ABPruning::ABPruningEngine::getInstance()->reset();
 }
 
 void QGobangBoard::slot_placePiece(int posX, int posY, bool isBlack)

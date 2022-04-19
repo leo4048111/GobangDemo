@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     ABPruning.cpp \
+    log.cpp \
     main.cpp \
     mainwindow.cpp \
     qchesspiece.cpp \
@@ -17,6 +18,7 @@ SOURCES += \
 
 HEADERS += \
     ABPruning.h \
+    log.h \
     mainwindow.h \
     qchesspiece.h \
     qgobangboard.h

@@ -26,6 +26,7 @@ public slots:
 
     void slot_clearBoard();
 
+
 private:
     bool isBlackTurn{true};
     QChessPiece* mat_board[PIECES_PER_ROW + 2][PIECES_PER_ROW +2]{{nullptr}};

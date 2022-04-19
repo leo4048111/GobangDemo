@@ -45,6 +45,16 @@ namespace ABPruning
         scenarioTypeTuple[EMPTY][WHITE][WHITE][WHITE][WHITE][EMPTY] = ScenarioType::FLEX4;
         //ºÚ»î4
         scenarioTypeTuple[EMPTY][BLACK][BLACK][BLACK][BLACK][EMPTY] = ScenarioType::flex4;
+        //°×³å4
+        scenarioTypeTuple[BLACK][WHITE][WHITE][WHITE][WHITE][EMPTY] = ScenarioType::CHARGE4;
+        scenarioTypeTuple[EMPTY][WHITE][WHITE][WHITE][WHITE][BLACK] = ScenarioType::CHARGE4;
+        scenarioTypeTuple[BORDER][WHITE][WHITE][WHITE][WHITE][EMPTY] = ScenarioType::CHARGE4;
+        scenarioTypeTuple[EMPTY][WHITE][WHITE][WHITE][WHITE][BORDER] = ScenarioType::CHARGE4;
+        //ºÚ³å4
+        scenarioTypeTuple[WHITE][BLACK][BLACK][BLACK][BLACK][EMPTY] = ScenarioType::charge4;
+        scenarioTypeTuple[EMPTY][BLACK][BLACK][BLACK][BLACK][WHITE] = ScenarioType::charge4;
+        scenarioTypeTuple[BORDER][BLACK][BLACK][BLACK][BLACK][EMPTY] = ScenarioType::charge4;
+        scenarioTypeTuple[EMPTY][BLACK][BLACK][BLACK][BLACK][BORDER] = ScenarioType::charge4;
         //°×»î3
         scenarioTypeTuple[EMPTY][WHITE][WHITE][WHITE][EMPTY][EMPTY] = ScenarioType::FLEX3;
         scenarioTypeTuple[EMPTY][EMPTY][WHITE][WHITE][WHITE][EMPTY] = ScenarioType::FLEX3;
@@ -117,11 +127,11 @@ namespace ABPruning
                                 {
                                     if (block1 == BORDER && block6 != BORDER)   //×ó±ß½ç
                                     {
-                                        //°×³å4
+                                        //°×Ìø4
                                         if (rightBlackCnt == 0 && rightWhiteCnt == 4)
                                             if (scenarioTypeTuple[block1][block2][block3][block4][block5][block6] == ScenarioType::OTHER)
                                                 scenarioTypeTuple[block1][block2][block3][block4][block5][block6] = ScenarioType::BLOCK4;
-                                        //ºÚ³å4
+                                        //ºÚÌø4
                                         if (rightBlackCnt == 4 && rightWhiteCnt == 0)
                                             if (scenarioTypeTuple[block1][block2][block3][block4][block5][block6] == ScenarioType::OTHER)
                                                 scenarioTypeTuple[block1][block2][block3][block4][block5][block6] = ScenarioType::block4;
@@ -144,11 +154,11 @@ namespace ABPruning
                                     }
                                     else if (block1 != BORDER && block6 == BORDER)  //ÓÒ±ß½ç
                                     {
-                                        //°×³å4
+                                        //°×Ìø4
                                         if (leftBlackCnt == 0 && leftWhiteCnt == 4)
                                             if (scenarioTypeTuple[block1][block2][block3][block4][block5][block6] == ScenarioType::OTHER)
                                                 scenarioTypeTuple[block1][block2][block3][block4][block5][block6] = ScenarioType::BLOCK4;
-                                        //ºÚ³å4
+                                        //ºÚÌø4
                                         if (leftBlackCnt == 4 && leftWhiteCnt == 0)
                                             if (scenarioTypeTuple[block1][block2][block3][block4][block5][block6] == ScenarioType::OTHER)
                                                 scenarioTypeTuple[block1][block2][block3][block4][block5][block6] = ScenarioType::block4;
@@ -172,11 +182,11 @@ namespace ABPruning
                                 }
                                 else   //ÎÞ±ß½ç
                                 {
-                                    //°×³å4
+                                    //°×Ìø4
                                     if ((leftBlackCnt == 0 && leftWhiteCnt == 4) || (rightBlackCnt == 0 && leftWhiteCnt == 4))
                                         if (scenarioTypeTuple[block1][block2][block3][block4][block5][block6] == ScenarioType::OTHER)
                                             scenarioTypeTuple[block1][block2][block3][block4][block5][block6] = ScenarioType::BLOCK4;
-                                    //ºÚ³å4
+                                    //ºÚÌø4
                                     if ((leftBlackCnt == 4 && leftWhiteCnt == 0) || (rightBlackCnt == 4 && leftWhiteCnt == 0))
                                         if (scenarioTypeTuple[block1][block2][block3][block4][block5][block6] == ScenarioType::OTHER)
                                             scenarioTypeTuple[block1][block2][block3][block4][block5][block6] = ScenarioType::block4;
@@ -204,34 +214,26 @@ namespace ABPruning
     void ABPruningEngine::initWeight()
     {
         this->weight[(int)ScenarioType::OTHER] = 0;
-        this->weight[(int)ScenarioType::WHITE_WIN] = 1000000;
-        this->weight[(int)ScenarioType::BLACK_WIN] = -10000000;
-        this->weight[(int)ScenarioType::FLEX4] = 50000;
-        this->weight[(int)ScenarioType::flex4] = -100000;
-        this->weight[(int)ScenarioType::BLOCK4] = 400;
-        this->weight[(int)ScenarioType::block4] = -100000;
-        this->weight[(int)ScenarioType::FLEX3] = 400;
-        this->weight[(int)ScenarioType::flex3] = -8000;
-        this->weight[(int)ScenarioType::BLOCK3] = 20;
-        this->weight[(int)ScenarioType::block3] = -50;
+        this->weight[(int)ScenarioType::WHITE_WIN] = 9999999;
+        this->weight[(int)ScenarioType::BLACK_WIN] = -9999999;
+        this->weight[(int)ScenarioType::FLEX4] = 1000000;
+        this->weight[(int)ScenarioType::flex4] = -1000000;
+        this->weight[(int)ScenarioType::BLOCK4] = 120;
+        this->weight[(int)ScenarioType::block4] = -120;
+        this->weight[(int)ScenarioType::CHARGE4] = 200;
+        this->weight[(int)ScenarioType::charge4] = -200;
+        this->weight[(int)ScenarioType::FLEX3] = 30;
+        this->weight[(int)ScenarioType::flex3] = -30;
+        this->weight[(int)ScenarioType::BLOCK3] = 15;
+        this->weight[(int)ScenarioType::block3] = -15;
         this->weight[(int)ScenarioType::FLEX2] = 20;
-        this->weight[(int)ScenarioType::flex2] = -50;
-        this->weight[(int)ScenarioType::BLOCK2] = 1;
-        this->weight[(int)ScenarioType::block2] = -3;
-        this->weight[(int)ScenarioType::FLEX1] = 1;
+        this->weight[(int)ScenarioType::flex2] = -20;
+        this->weight[(int)ScenarioType::BLOCK2] = 5;
+        this->weight[(int)ScenarioType::block2] = -5;
+        this->weight[(int)ScenarioType::FLEX1] = 3;
         this->weight[(int)ScenarioType::flex1] = -3;
-    }
-
-    void ABPruningEngine::initSearchSequence()
-    {
-        for (int i = PIECES_PER_ROW / 2 + 1; i <= PIECES_PER_ROW; i++)
-            for (int k = PIECES_PER_ROW - i + 1; k <= i; k++)
-                for (int w = PIECES_PER_ROW - i + 1; w <= i; w++)
-                {
-                    Vec2 pos = { k,w };
-                    if (std::find(this->searchSequence.begin(), this->searchSequence.end(), pos) == this->searchSequence.end())
-                        this->searchSequence.push_back({ k,w });
-                }
+        this->weight[(int)ScenarioType::TERMINATOR] = 10000;
+        this->weight[(int)ScenarioType::terminator] = -12000;
     }
 
     uint64_t ABPruningEngine::calculateHash(const Board board)
@@ -242,8 +244,10 @@ namespace ABPruning
             for (int j = 1; j <= 15; j++)
             {
                 if (board[i][j] != BlockStatus::empty)
+                {
                     if (board[i][j] == BlockStatus::white) hashValue ^= this->whitePiecesHash[i][j];
                     else if (board[i][j] == BlockStatus::black) hashValue ^= this->blackPiecesHash[i][j];
+                }
             }
         }
 
@@ -260,7 +264,7 @@ namespace ABPruning
         }
 
         //4¸ö·½ÏòÉÏ²»Í¬¾ÖÃæµÄ¸öÊý
-        int stat[4][17];
+        int stat[4][21];
         memset(stat, 0, sizeof(stat));
 
         //ÅÐ¶ÏºáÏò¾ÖÃæ
@@ -313,7 +317,7 @@ namespace ABPruning
         return result;
     }
 
-#define MAX_SEARCH_DEPTH 4
+#define MAX_SEARCH_DEPTH 2
 
     int ABPruningEngine::dfs(LPNode& node)
     {
@@ -324,7 +328,34 @@ namespace ABPruning
             node->status = result.status;
             return node->value;
         }
-        for (auto pos : this->searchSequence)
+
+        std::vector<Vec2> curSearchSequence;
+        for (auto pos : this->piecesPosition)
+        {
+            if (node->board[pos.x][pos.y] != BlockStatus::empty && node->board[pos.x][pos.y] != BlockStatus::border)
+            {
+                for (int i = -1; i <= 1; i++)
+                    for (int j = -1; j <= 1; j++)
+                    {
+                        Vec2 curPos = { pos.x + i, pos.y + j };
+                        if (node->board[curPos.x][curPos.y] == BlockStatus::empty)
+                            if (std::find(curSearchSequence.begin(), curSearchSequence.end(), curPos) == curSearchSequence.end())
+                                curSearchSequence.push_back(curPos);
+                    }
+
+                for (int i = -2; i <= 2; i++)
+                    for (int j = -2; j <= 2; j++)
+                    {
+                        Vec2 curPos = { pos.x + i, pos.y + j };
+                        if ((i == j) && node->board[curPos.x][curPos.y] == BlockStatus::empty)
+                            if (std::find(curSearchSequence.begin(), curSearchSequence.end(), curPos) == curSearchSequence.end())
+                                curSearchSequence.push_back(curPos);
+                    }
+            }
+        }
+        std::shuffle(curSearchSequence.begin(), curSearchSequence.end(), std::default_random_engine(std::random_device()()));
+
+        for (auto pos : curSearchSequence)
         {
             int i = pos.x;
             int j = pos.y;
@@ -350,25 +381,44 @@ namespace ABPruning
                 if (node->beta <= node->alpha) break;
             }
         }
+
         return node->value;
     }
 
     Vec2 ABPruningEngine::run(Board board)  //´«ÈëµÄ×´Ì¬±Ø¶¨ÎªMAX²ã
     {
-        this->bestMove = { -1, -1 };
         EstimateResult result = estimate(board);
         LPNode root = new Node(board, 0, result.score, INT_MIN, INT_MAX, true, nullptr, result.status);
+        this->initPiecesPosition(board);
         int val = dfs(root);
         delete root;
         return this->bestMove;
     }
 
+    void ABPruningEngine::initPiecesPosition(const Board board)
+    {
+        this->piecesPosition.clear();
+        for (int i = 1; i <= PIECES_PER_ROW; i++)
+            for (int j = 1; j <= PIECES_PER_ROW; j++)
+                if (board[i][j] != BlockStatus::empty && board[i][j] != BlockStatus::border)
+                    this->piecesPosition.push_back({ i, j });
+    }
+
     ABPruningEngine::ABPruningEngine()
     {
-        this->initSearchSequence();
         this->initHashValues();
         this->initScenarioTypeTuple();
         this->initWeight();
+    }
+
+    void ABPruningEngine::reset()
+    {
+        this->initHashValues();
+        this->initScenarioTypeTuple();
+        this->initWeight();
+        this->bestMove = { -1, -1 };
+        this->piecesPosition.clear();
+        this->transTabel.clear();
     }
 
 }
