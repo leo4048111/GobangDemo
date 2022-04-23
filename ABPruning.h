@@ -143,12 +143,12 @@ namespace ABPruning
 
         void initPiecesPosition(const Board board);
 
-        EstimateResult estimate(const Board board);
-
         int dfs(LPNode& node);
 
     public:
         Vec2 run(Board board);
+
+        EstimateResult estimate(const Board board);
 
         void reset();
 

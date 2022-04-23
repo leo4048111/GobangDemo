@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>859</width>
-    <height>600</height>
+    <width>989</width>
+    <height>626</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -36,8 +36,14 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>470</width>
-          <height>470</height>
+          <width>590</width>
+          <height>590</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>590</width>
+          <height>590</height>
          </size>
         </property>
         <property name="styleSheet">
@@ -72,6 +78,25 @@ QPushButton:hover
 </string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QTextEdit" name="logOutput">
+           <property name="font">
+            <font>
+             <pointsize>11</pointsize>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="verticalScrollBarPolicy">
+            <enum>Qt::ScrollBarAlwaysOn</enum>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+           <property name="placeholderText">
+            <string>Log here...</string>
+           </property>
+          </widget>
+         </item>
          <item>
           <widget class="QFrame" name="frame">
            <property name="minimumSize">
@@ -108,6 +133,9 @@ QPushButton:hover
            </item>
            <item>
             <widget class="QPushButton" name="btnUndo">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
              <property name="cursor">
               <cursorShape>PointingHandCursor</cursorShape>
              </property>

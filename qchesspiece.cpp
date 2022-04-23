@@ -1,7 +1,7 @@
 #include <QGraphicsDropShadowEffect>
 #include "qchesspiece.h"
 
-const uint32_t piece_width = 30;
+const uint32_t piece_width = 36;
 const uint32_t piece_height = piece_width;
 
 QChessPiece::QChessPiece(int midX, int midY, bool isBlack, QWidget* parent):QLabel(parent)

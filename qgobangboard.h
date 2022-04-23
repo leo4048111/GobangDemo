@@ -17,6 +17,7 @@ public:
 signals:
     void signal_placePiece(int posX, int posY, bool isPlayer);
     void signal_clearBoard();
+    void signal_judgeWin();
 
 private slots:
     void mousePressEvent(QMouseEvent* event);
@@ -27,6 +28,9 @@ public slots:
     void slot_clearBoard();
 
     void slot_undoMove();
+
+private slots:
+    void slot_judgeWin();
 
 public:
     void findBestMove();

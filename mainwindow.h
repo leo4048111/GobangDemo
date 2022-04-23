@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "qgobangboard.h"
+#include <log.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -19,7 +20,10 @@ public:
 private:
     Ui::MainWindow *ui;
 
-private:
-    QGobangBoard* board;
+private slots:
+    //log
+    void slot_onReceiveLog(const QString str, const Log::LogType type);
+
+
 };
 #endif // MAINWINDOW_H

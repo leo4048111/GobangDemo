@@ -5,13 +5,14 @@
 #include <Windows.h>
 
 #include "qgobangboard.h"
+#include "log.h"
 
-const uint32_t block_width = 30;
-const uint32_t block_height = block_width;
-const uint32_t board_border_width = 5;
-const uint32_t board_margin = 20;
-const uint32_t board_width = block_width * (PIECES_PER_ROW - 1) + 2 * (board_border_width + board_margin);
+const uint32_t board_width = 590;
 const uint32_t board_height = board_width;
+const uint32_t board_border_width = 5;
+const uint32_t board_margin = 24;
+const uint32_t block_width = (board_width - 2 * (board_border_width + board_margin))/(PIECES_PER_ROW - 1);
+const uint32_t block_height = block_width;
 const QPoint board_start_coord = {50, 50};
 
 QGobangBoard::QGobangBoard(QWidget* parent) : QFrame(parent)
@@ -24,6 +25,7 @@ QGobangBoard::QGobangBoard(QWidget* parent) : QFrame(parent)
 
     connect(this, &QGobangBoard::signal_placePiece, this, &QGobangBoard::slot_placePiece);
     connect(this, &QGobangBoard::signal_clearBoard, this, &QGobangBoard::slot_clearBoard);
+    connect(this, &QGobangBoard::signal_judgeWin, this, &QGobangBoard::slot_judgeWin);
 
     //init board
     this->slot_clearBoard();
@@ -92,6 +94,9 @@ void QGobangBoard::slot_clearBoard()
 
     //reset engine
     ABPruning::ABPruningEngine::getInstance()->reset();
+
+    //reset board
+    this->setDisabled(false);
 }
 
 void QGobangBoard::slot_placePiece(int posX, int posY, bool isPlayer)
@@ -108,6 +113,10 @@ void QGobangBoard::slot_placePiece(int posX, int posY, bool isPlayer)
     this->board[posX][posY] = (!(isPlayer ^ this->isPlayerBlack))?ABPruning::BlockStatus::black:ABPruning::BlockStatus::white;
     if(isPlayer) this->playerMovements.push({posX, posY});
     else this->aiMovements.push({posX, posY});
+
+    if(isPlayer) LOG("Player plays (" + QString::number(posX) + "," + QString::number(posY) +")", Log::LogType::runtime)
+    else LOG("Bot plays (" + QString::number(posX) + "," + QString::number(posY) +")", Log::LogType::runtime)
+
 }
 
 void QGobangBoard::slot_undoMove()
@@ -125,6 +134,7 @@ void QGobangBoard::slot_undoMove()
         }
 
         this->board[pos.x][pos.y] = ABPruning::BlockStatus::empty;
+        LOG("Player undoes (" + QString::number(pos.x) + "," + QString::number(pos.y) +")", Log::LogType::runtime)
     }
 
     if(!this->aiMovements.empty())
@@ -138,11 +148,13 @@ void QGobangBoard::slot_undoMove()
         }
 
         this->board[pos.x][pos.y] = ABPruning::BlockStatus::empty;
+        LOG("Bot undoes (" + QString::number(pos.x) + "," + QString::number(pos.y) +")", Log::LogType::runtime)
     }
 }
 
 DWORD WINAPI FindBestMoveThread(LPVOID params)
 {
+    qRegisterMetaType<Log::LogType>("Log::LogType");
     QGobangBoard* pThis = reinterpret_cast<QGobangBoard*>(params);
     pThis->findBestMove();
     return NULL;
@@ -151,8 +163,27 @@ DWORD WINAPI FindBestMoveThread(LPVOID params)
 void QGobangBoard::findBestMove()
 {
     ABPruning::Vec2 result = ABPruning::ABPruningEngine::getInstance()->run(this->board);
-    if(result.x != -1 && result.y != -1)
+    if(result.x != -1 && result.y != -1 && result.x != -2 && result.y != -2)
+    {
         emit signal_placePiece(result.x, result.y, false);
+    }
+
+    emit signal_judgeWin();
+}
+
+void QGobangBoard::slot_judgeWin()
+{
+    auto curBoardStats = ABPruning::ABPruningEngine::getInstance()->estimate(this->board);
+    if(curBoardStats.status == ABPruning::ABPruningEngine::WinningStatus::BLACK_WIN)
+    {
+        this->setDisabled(true);
+        LOG("Player wins", Log::LogType::runtime)
+    }
+    else if(curBoardStats.status == ABPruning::ABPruningEngine::WinningStatus::WHITE_WIN)
+    {
+        this->setDisabled(true);
+        LOG("Bot wins", Log::LogType::runtime)
+    }
 }
 
 void QGobangBoard::mousePressEvent(QMouseEvent* event)
