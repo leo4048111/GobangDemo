@@ -378,7 +378,7 @@ Alphabeta剪枝算法的主要步骤可以分解为如下若干：
 
 虑的点进行剪枝，不进行下一步的考虑，以此将搜索树加以修剪．1975 年，Knuth 等证明在搜索节点排列为理想的情况下，将节点分支数记为 b，深度记为 d，搜索的节点数 n 为：  
 
- ![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image014.jpg)
+ ![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image014.gif)
 
  ![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image016.jpg)
 
