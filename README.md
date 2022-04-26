@@ -158,7 +158,7 @@
 
 五子棋是全国智力运动会竞技项目之一，是一种两人对弈的纯策略型棋类游戏。双方分别使用黑白两色的棋子，下在棋盘直线与横线的交叉点上，先形成五子连珠者获胜。五子棋容易上手，老少皆宜，而且趣味横生，引人入胜。它不仅能增强思维能力，提高智力，而且富含哲理，有助于修身养性。本实验中，由电脑执白子，玩家执黑子进行人机博弈。
 
-![img](file:///C:/Users/Admin/AppData/Local/Temp/msohtmlclip1/01/clip_image002.jpg)
+![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image002.jpg)
 
 ### 1.1.3 实验简述
 
@@ -216,13 +216,13 @@
 
 ​      
 
-![img](file:///C:/Users/Admin/AppData/Local/Temp/msohtmlclip1/01/clip_image004.jpg)
+![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image004.jpg)
 
 ​      
 
 ## 2.2 核心算法及基本原理
 
-### [2.2.1  Alphabeta剪枝算法的原理](#直接计算生成函数法测定稳定常数的原理)
+### 2.2.1  Alphabeta剪枝算法的原理
 
 Alphabeta剪枝算法的主要步骤可以分解为如下若干：
 
@@ -240,7 +240,7 @@ Alphabeta剪枝算法的主要步骤可以分解为如下若干：
 
 ​      本程序中，将每个五子棋的局面看做是若干“棋型”的集合，对于每个棋型计分，最后累加得到局面的总评分。在五子棋博弈中，活三和冲四是五子棋着棋过程最重要的棋型，活三两头均可进攻，冲四具有绝对先手，连续的冲四和活三的进攻是五子棋获胜的关键技术．而活三的一些变体棋型，如有一边空一格被对方棋子拦住，如图 1 的棋型 g 所示．此外跳活三、跳四，也是十分重要的棋型．跳四和冲四一样，具备绝对先手。[1]
 
-![img](file:///C:/Users/Admin/AppData/Local/Temp/msohtmlclip1/01/clip_image006.jpg)
+![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image006.jpg)
 
 ​      本程序中不单独考虑为绝杀棋型的局面设置权重，只考虑黑白双份各10种，总共20种基本局面的权重计算。算法的实现上，首先维护一个六元组scenarioTypeTuple，该六元组的元素表示六个连续棋盘格中的情况与该元素对应的索引相同时这个六元组的棋型。棋型评估时，通过滑动窗口的思路，分别在横纵左斜和右斜四个方向上以长度6为单位滑动一个滑块，每次滑动时找到六元组中对应的棋型，并且记录当前棋局中该棋型的个数。最后将全部的权重相加，即得到棋局的评估值
 
@@ -250,13 +250,13 @@ Alphabeta剪枝算法的主要步骤可以分解为如下若干：
 
 为了缓解这种情况，本文参考相关资料，使用局部搜索的搜索策略改善搜索效率。局部搜索即只对于当前存在棋子的格子周围一定范围内的空格进行搜索，伪代码如下：
 
-![img](file:///C:/Users/Admin/AppData/Local/Temp/msohtmlclip1/01/clip_image008.jpg)
+![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image008.jpg)
 
- ![img](file:///C:/Users/Admin/AppData/Local/Temp/msohtmlclip1/01/clip_image010.jpg)
+ ![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image010.jpg)
 
 使用局部搜索前后的节点量对比如表 3 所示，局部搜索效果非常有效，第二层和第四层节点分别减少了 96.59%和 99.94%，且原本无法计算的第六层使用较长时间也可被成功计算。
 
-![img](file:///C:/Users/Admin/AppData/Local/Temp/msohtmlclip1/01/clip_image012.jpg)
+![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image012.jpg)
 
 
 
@@ -386,9 +386,9 @@ Alphabeta剪枝算法的主要步骤可以分解为如下若干：
 
 虑的点进行剪枝，不进行下一步的考虑，以此将搜索树加以修剪．1975 年，Knuth 等证明在搜索节点排列为理想的情况下，将节点分支数记为 b，深度记为 d，搜索的节点数 n 为：  
 
-![img](file:///C:/Users/Admin/AppData/Local/Temp/msohtmlclip1/01/clip_image014.gif)
+![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image014.jpg)
 
-![img](file:///C:/Users/Admin/AppData/Local/Temp/msohtmlclip1/01/clip_image016.jpg)
+![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image016.jpg)
 
  
 
@@ -400,7 +400,7 @@ Alphabeta剪枝算法的主要步骤可以分解为如下若干：
 
 ​      本实验中，由实验者执黑子先手，电脑执白子后手进行对弈。经过了激烈的对局后，电脑于第22手开始进行猛烈的连续进攻，最终取得了胜利。
 
-![img](file:///C:/Users/Admin/AppData/Local/Temp/msohtmlclip1/01/clip_image018.jpg)
+![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image018.jpg)
 
 
 
