@@ -61,6 +61,22 @@ QGobangBoard::QGobangBoard(QWidget* parent) : QFrame(parent)
         coord.setX(board_border_width + board_margin);
         coord.setY(coord.y() + block_height);
     }
+
+    //init adornment
+    const int adornment_width = 10;
+    const int adornment_x[5] = {4, 12, 8, 4, 12};
+    const int adornment_y[5] = {4, 4, 8, 12, 12};
+    for(int i  = 0; i < 5; i++)
+    {
+        uint32_t adornmentMidX = board_border_width + board_margin + block_width * (adornment_x[i] - 1);
+        uint32_t adornmentMidY = board_border_width + board_margin + block_height * (adornment_y[i] - 1);
+        QLabel* adornment = new QLabel(this);
+        adornment->setGeometry(adornmentMidX - adornment_width/2, adornmentMidY - adornment_width/2, adornment_width, adornment_width);
+        adornment->setStyleSheet("QLabel{border:1px solid black;\
+                                   background-color: black;\
+                                   border-radius:" + QString::number(adornment_width/2) + "px;}");
+    }
+
 }
 
 void QGobangBoard::slot_clearBoard()
@@ -97,6 +113,8 @@ void QGobangBoard::slot_clearBoard()
 
     //reset board
     this->setDisabled(false);
+
+    LOG("Board has been reset.", Log::LogType::normal)
 }
 
 void QGobangBoard::slot_placePiece(int posX, int posY, bool isPlayer)
