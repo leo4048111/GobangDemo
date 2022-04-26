@@ -244,11 +244,11 @@ Alphabeta剪枝算法的主要步骤可以分解为如下若干：
 
 ![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image008.jpg)
 
- ![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image0010.jpg)
+ ![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image010.jpg)
 
 使用局部搜索前后的节点量对比如表 3 所示，局部搜索效果非常有效，第二层和第四层节点分别减少了 96.59%和 99.94%，且原本无法计算的第六层使用较长时间也可被成功计算。
 
-![img](![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image012.jpg))
+ ![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image012.jpg)
 
 
 
@@ -378,9 +378,9 @@ Alphabeta剪枝算法的主要步骤可以分解为如下若干：
 
 虑的点进行剪枝，不进行下一步的考虑，以此将搜索树加以修剪．1975 年，Knuth 等证明在搜索节点排列为理想的情况下，将节点分支数记为 b，深度记为 d，搜索的节点数 n 为：  
 
-![img](![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image014.jpg))
+ ![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image014.jpg)
 
-![img](![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image016.jpg))
+ ![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image016.jpg)
 
  
 
@@ -392,7 +392,7 @@ Alphabeta剪枝算法的主要步骤可以分解为如下若干：
 
 ​      本实验中，由实验者执黑子先手，电脑执白子后手进行对弈。经过了激烈的对局后，电脑于第22手开始进行猛烈的连续进攻，最终取得了胜利。
 
-![img](![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image018.jpg))
+ ![img](https://github.com/leo4048111/GobangDemo/blob/main/images/clip_image018.jpg)
 
 
 
