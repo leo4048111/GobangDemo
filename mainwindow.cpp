@@ -8,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     this->setWindowTitle("GobangDemo");
+    this->setWindowFlags(windowFlags()& ~Qt::WindowMaximizeButtonHint);
+    this->setFixedSize(this->width(), this->height());
 
     //controllers
     connect(this->ui->btnRestart, &QPushButton::clicked, this->ui->board, &QGobangBoard::slot_clearBoard);
