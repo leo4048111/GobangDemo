@@ -1,6 +1,6 @@
  
 
-# **五子棋人机博弈** 作者：同济大学20级计算机系 2050250 2022.4.26
+# EZ Gobang Game implemented with Qt
 ## This is a playable gobang game implemented with QT, in which u play against a AI player. AI moves are calculated with A-B-Pruning algorithm.
 摘 要
 
